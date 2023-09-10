@@ -57,14 +57,14 @@ program
 
   // InteractiveOptions with choices will show a select prompt by default
   .addOption(
-    new Option("-s, --size <size>", "size")
+    new InteractiveOption("-s, --size <size>", "size")
       .choices(["small", "medium", "large"])
       // Missing mandatory options won't throw an error in interactive mode
       .makeOptionMandatory(),
   )
 
   .addOption(
-    new Option("-n, --name <string>", "your name")
+    new InteractiveOption("-n, --name <string>", "your name")
       // You can use the prompt method to implement your own prompt logic
       .prompt(async (currentValue, option, command) => {
         // TODO: Implement your own prompt logic here
