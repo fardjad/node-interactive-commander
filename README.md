@@ -110,8 +110,10 @@ More examples can be found in the [examples](/examples/) directory.
 
 ### Interactive options for the root command
 
-Interactive options are not supported for the root command. However, you can
-mark a subcommand as the default command to achieve a similar effect:
+Interactive options on main command won't be prompted for in interactive mode
+if no subcommand is invoked. That is because Commander.js doesn't support
+pre-parse hooks for the main command. As a workaround, you can define a
+subcommand as the default command to achieve a similar effect:
 
 ```typescript
 import { InteractiveCommand } from "interactive-commander";

@@ -175,4 +175,18 @@ await test("parseAsync", async (t) => {
       { code: "commander.missingMandatoryOptionValue" },
     );
   });
+
+  await t.test("version option", async (t) => {
+    const readFunctionMock = t.mock.fn(async () => true);
+
+    rootCommand.version("1.0.0", "-V, --version");
+    const versionOption = rootCommand.options.find(
+      (option) => option.short === "-V",
+    ) as InteractiveOption;
+    versionOption.prompt(readFunctionMock);
+
+    await rootCommand.parseAsync(["node", "test", "sub", "-i"]);
+
+    assert.strictEqual(readFunctionMock.mock.calls.length, 0);
+  });
 });

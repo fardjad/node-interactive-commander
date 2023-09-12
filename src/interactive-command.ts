@@ -32,6 +32,25 @@ export class InteractiveCommand extends Command {
     return new InteractiveOption(flags, description);
   }
 
+  version(...arguments_: Parameters<Command["version"]>): this {
+    const returnValue = super.version(...arguments_);
+
+    const versionOptionName = (this as this & { _versionOptionName?: string })
+      ._versionOptionName;
+
+    if (!versionOptionName) {
+      return returnValue;
+    }
+
+    const versionOption = this.options.find(
+      (option) => option.attributeName() === versionOptionName,
+    ) as InteractiveOption;
+    // eslint-disable-next-line unicorn/no-useless-undefined
+    versionOption.prompt(undefined);
+
+    return returnValue;
+  }
+
   /**
    * Enable interactive mode
    *
