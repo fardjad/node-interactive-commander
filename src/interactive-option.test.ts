@@ -41,7 +41,7 @@ await test("defaultReadFunction", async (t) => {
       confirm,
     });
 
-    await option.readFunction(false, option, dummyCommand);
+    await option.readFunction!(false, option, dummyCommand);
     assert.strictEqual(confirm.mock.calls.length, 1);
     assert.deepStrictEqual(confirm.mock.calls[0].arguments, [
       { default: false, message: "boolean option" },
@@ -53,7 +53,7 @@ await test("defaultReadFunction", async (t) => {
       confirm,
     });
 
-    await option.readFunction(false, option, dummyCommand);
+    await option.readFunction!(false, option, dummyCommand);
     assert.strictEqual(confirm.mock.calls.length, 1);
     assert.deepStrictEqual(confirm.mock.calls[0].arguments, [
       { default: true, message: "boolean option" },
@@ -69,7 +69,7 @@ await test("defaultReadFunction", async (t) => {
       // This must be called after choices because it resets the parser
       .argParser(undefined as unknown as () => unknown);
 
-    await option.readFunction(undefined, option, dummyCommand);
+    await option.readFunction!(undefined, option, dummyCommand);
     assert.strictEqual(select.mock.calls.length, 1);
     assert.deepStrictEqual(select.mock.calls[0].arguments, [
       {
@@ -100,7 +100,7 @@ await test("defaultReadFunction", async (t) => {
       // This must be called after choices because it resets the parser
       .argParser(undefined as unknown as () => unknown);
 
-    await option.readFunction("b", option, dummyCommand);
+    await option.readFunction!("b", option, dummyCommand);
     assert.strictEqual(select.mock.calls.length, 1);
     assert.deepStrictEqual(select.mock.calls[0].arguments, [
       {
@@ -128,7 +128,7 @@ await test("defaultReadFunction", async (t) => {
 
     await assert.rejects(
       async () => {
-        await option.readFunction(undefined, option, dummyCommand);
+        await option.readFunction!(undefined, option, dummyCommand);
       },
       { code: "commander.invalidArgument" },
     );
@@ -139,7 +139,7 @@ await test("defaultReadFunction", async (t) => {
       input,
     });
 
-    await option.readFunction("default", option, dummyCommand);
+    await option.readFunction!("default", option, dummyCommand);
     assert.strictEqual(input.mock.calls.length, 1);
     assert.deepStrictEqual(input.mock.calls[0].arguments, [
       { default: "default", message: "string" },
@@ -153,7 +153,7 @@ await test("defaultReadFunction", async (t) => {
       input: () => createCancelablePromise(Promise.resolve("answer")),
     }).argParser(parseArgument);
 
-    await option.readFunction("default", option, dummyCommand);
+    await option.readFunction!("default", option, dummyCommand);
     assert.strictEqual(parseArgument.mock.calls.length, 1);
   });
 
@@ -162,7 +162,7 @@ await test("defaultReadFunction", async (t) => {
       input: () => createCancelablePromise(Promise.resolve("answer")),
     });
 
-    const answer = await option.readFunction("default", option, dummyCommand);
+    const answer = await option.readFunction!("default", option, dummyCommand);
     assert.strictEqual(answer, "answer");
   });
 });

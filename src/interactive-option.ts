@@ -15,7 +15,7 @@ export type PromptFunctions = {
 };
 
 export class InteractiveOption extends Option {
-  public readFunction = this._defaultReadFunction;
+  public readFunction: ReadFunction | undefined = this._defaultReadFunction;
   private readonly _promptFunctions: PromptFunctions;
 
   constructor(
@@ -34,7 +34,14 @@ export class InteractiveOption extends Option {
       : inquirer;
   }
 
-  prompt(readFunction: ReadFunction): this {
+  /**
+   * Set a function that will be called to read the option value interactively.
+   * When undefined is passed, the prompt will be skipped.
+   *
+   * @param readFunction
+   * @returns
+   */
+  prompt(readFunction: ReadFunction | undefined): this {
     this.readFunction = readFunction;
 
     return this;
