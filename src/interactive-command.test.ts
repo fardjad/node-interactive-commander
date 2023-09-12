@@ -4,8 +4,8 @@ import { Command, Option } from "commander";
 import assert from "node:assert";
 import { test } from "node:test";
 
-await test("interactive flags", async (t) => {
-  await t.test("unset", async () => {
+await test("interactive", async (t) => {
+  await t.test("unset flags", async () => {
     const interactiveCommand = new InteractiveCommand();
 
     assert.deepStrictEqual(interactiveCommand.options, []);
@@ -30,19 +30,41 @@ await test("interactive flags", async (t) => {
     ]);
   });
 
-  await t.test("inheritance", async () => {
-    const parentCommand = new InteractiveCommand().interactive(
-      "-c, --custom",
-      "custom option",
-    );
+  await t.test("nested commands", async () => {
+    const rootCommand = new InteractiveCommand();
 
-    const subCommand = parentCommand.command("sub");
+    const subCommand = rootCommand.command("sub");
 
-    for (const command of [parentCommand, subCommand]) {
+    rootCommand.interactive("-c, --custom", "custom option");
+
+    for (const command of [rootCommand, subCommand]) {
       assert.deepStrictEqual(command.options, [
         new Option("-c, --custom", "custom option"),
       ]);
     }
+  });
+
+  await t.test("multiple invokations", async (t) => {
+    const readFunction = t.mock.fn(async () => "value");
+
+    const rootCommand = new InteractiveCommand();
+
+    const subCommand = rootCommand
+      .command("sub")
+      .addOption(
+        new InteractiveOption("-c, --custom <value>", "custom option").prompt(
+          readFunction,
+        ),
+      );
+
+    rootCommand.interactive();
+    rootCommand.interactive();
+
+    await rootCommand.parseAsync(["node", "test", "sub", "-i"]);
+
+    assert.strictEqual(readFunction.mock.calls.length, 1);
+    assert.strictEqual(rootCommand.options.length, 1);
+    assert.strictEqual(subCommand.options.length, 2);
   });
 });
 
@@ -59,10 +81,15 @@ await test("parseAsync", async (t) => {
   let subCommand: InteractiveCommand;
 
   t.beforeEach(() => {
-    rootCommand = new InteractiveCommand().interactive();
-    rootCommand.exitOverride();
+    rootCommand = new InteractiveCommand().configureOutput({
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      outputError() {},
+    });
 
+    rootCommand.exitOverride();
     subCommand = rootCommand.command("sub");
+
+    rootCommand.interactive();
   });
 
   await t.test("interactive sub-command - non-interactive mode", async (t) => {
@@ -79,6 +106,8 @@ await test("parseAsync", async (t) => {
   await t.test("non-interactive sub-command - interactive mode", async (t) => {
     const nonInteractiveCommand = new Command("non-interactive");
     rootCommand.addCommand(nonInteractiveCommand);
+
+    rootCommand.interactive();
 
     assert.doesNotThrow(async () => {
       await rootCommand.parseAsync(["node", "test", "non-interactive", "-i"]);

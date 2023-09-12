@@ -1,36 +1,5 @@
-# Interactive Commander
-
-<div class="paragraph">
-
-<span class="image"><a href="https://www.npmjs.com/package/interactive-commander" class="image"><img src="https://img.shields.io/npm/v/interactive-commander" alt="NPM Version" /></a></span> <span class="image"><a href="https://www.npmjs.com/package/interactive-commander" class="image"><img src="https://img.shields.io/npm/dm/interactive-commander" alt="Monthly Downloads" /></a></span> <span class="image"><a href="https://github.com/fardjad/node-interactive-commander/actions" class="image"><img src="https://img.shields.io/github/actions/workflow/status/fardjad/node-interactive-commander/test-and-release.yml?branch=main" alt="test-and-release Workflow Status" /></a></span>
-
-</div>
-
-Interactive Commander is an extension of the widely-used [Commander.js][1] library.
-It seamlessly integrates configurable interactive prompts for missing options
-in your CLI application, enhancing user experience with minimal effort.
-
-![Video Demo](/media/demo.gif)
-
-## Features
-
-- Full compatibility with Commander.js (it uses Commander.js under the hood and is
-  a drop-in replacement for it)
-- Interactive prompts for missing options including the mandatory options
-- Configurable flags for enabling interactive mode
-- Configurable prompts for each option
-- Default prompts for boolean, multiple-choice, and string options
-
-## Installation
-
-```bash
-npm install --save interactive-commander
-```
-
-## Usage
-
-```typescript
-import { InteractiveCommand, InteractiveOption } from "interactive-commander";
+/* eslint-disable no-warning-comments, unicorn/no-useless-undefined */
+import { InteractiveCommand, InteractiveOption } from "../src/index.ts";
 
 const program = new InteractiveCommand();
 
@@ -102,9 +71,3 @@ await program
 // command-name pizza -i --count 2 --no-cheese
 // command-name pizza -i --name "John Doe"
 // command-name pizza -i --name "John Doe" --non-interactive-option abc
-```
-
-More examples can be found in the [examples](/examples/) directory.
-
-[1]: https://github.com/tj/commander.js
-[2]: https://github.com/SBoudrias/Inquirer.js

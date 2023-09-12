@@ -11,48 +11,65 @@ import { partialParse } from "parse-my-command";
 
 export class InteractiveCommand extends Command {
   private _interactiveOptionName = "interactive";
+  /**
+   * The command that its parseAsync method is called
+   */
+  private _isRootCommand = false;
+  private _hasHook = false;
+
+  // The following will only be set on the root command
   private _providedOptions: Map<Command, OptionValues> | undefined;
   private _missingOptions: Map<Command, Set<string>> | undefined;
   private _providedOptionsSources:
     | Map<Command, Map<string, OptionValueSource | undefined>>
     | undefined;
 
-  constructor(...arguments_: ConstructorParameters<typeof Command>) {
-    super(...arguments_);
-
-    this.installHook(this);
+  createCommand(name?: string): InteractiveCommand {
+    return new InteractiveCommand(name);
   }
 
-  createCommand(name?: string): InteractiveCommand {
-    const cmd = new InteractiveCommand(name);
-    this.installHook(cmd);
-
-    const interactiveOption = this.options.find(
-      (option) => option.attributeName() === this._interactiveOptionName,
-    );
-
-    if (interactiveOption) {
-      cmd.interactive(interactiveOption.flags, interactiveOption.description);
-    }
-
-    return cmd;
+  createOption(flags: string, description?: string): InteractiveOption {
+    return new InteractiveOption(flags, description);
   }
 
   /**
    * Enable interactive mode
    *
-   * This method auto-registers the "-i, --interactive" flag which prompts the
-   * user for missing (interactive) options.
+   * This method recursively auto-registers the "-i, --interactive" flag which
+   * prompts the user for missing (interactive) options.
    *
-   * You can optionally supply the flags and description to override the defaults.
+   * You can optionally supply the flags and description to override the
+   * defaults.
+   *
+   * This method should almost always be called on the root command, after all
+   * subcommands are hooks are added/configured.
    */
   interactive(flags?: string, description?: string): this {
-    const option = new Option(
+    const newOption = new Option(
       flags ?? `-i, --interactive`,
       description ?? "interactive mode",
     );
-    this.addOption(option);
-    this._interactiveOptionName = option.attributeName();
+
+    const existingOption = this.options.find(
+      (option) => option.attributeName() === newOption.attributeName(),
+    );
+
+    if (!existingOption) {
+      this.addOption(newOption);
+      this._interactiveOptionName = newOption.attributeName();
+    }
+
+    this.addHookIfAbsent();
+
+    for (const command of this.commands as Array<
+      InteractiveCommand | Command
+    >) {
+      if (!(command instanceof InteractiveCommand)) {
+        continue;
+      }
+
+      command.interactive(flags, description);
+    }
 
     return this;
   }
@@ -65,8 +82,14 @@ export class InteractiveCommand extends Command {
     argv?: readonly string[],
     options?: ParseOptions,
   ): Promise<this> {
+    this._isRootCommand = true;
     try {
-      this.partialParse(argv, options);
+      const { providedOptions, missingOptions, providedOptionsSources } =
+        partialParse(this, argv ?? process.argv, options);
+
+      this._providedOptions = providedOptions;
+      this._missingOptions = missingOptions;
+      this._providedOptionsSources = providedOptionsSources;
     } catch {}
 
     return super.parseAsync(argv, options);
@@ -100,20 +123,29 @@ export class InteractiveCommand extends Command {
     }
   }
 
-  private partialParse(
-    argv: readonly string[] = process.argv,
-    options?: ParseOptions,
-  ) {
-    const { providedOptions, missingOptions, providedOptionsSources } =
-      partialParse(this, argv, options);
+  private findRootCommand(): InteractiveCommand {
+    // eslint-disable-next-line unicorn/no-this-assignment, @typescript-eslint/no-this-alias
+    let currentCommand: InteractiveCommand | undefined = this;
 
-    this._providedOptions = providedOptions;
-    this._missingOptions = missingOptions;
-    this._providedOptionsSources = providedOptionsSources;
+    while (currentCommand) {
+      if (currentCommand._isRootCommand) {
+        return currentCommand;
+      }
+
+      currentCommand = currentCommand.parent as InteractiveCommand | undefined;
+    }
+
+    throw new Error("Root command not found!");
   }
 
-  private installHook(cmd: InteractiveCommand) {
-    cmd.hook(
+  private addHookIfAbsent() {
+    if (this._hasHook) {
+      return;
+    }
+
+    this._hasHook = true;
+
+    this.hook(
       "preSubcommand",
       async (
         thisCommand: InteractiveCommand,
@@ -130,15 +162,20 @@ export class InteractiveCommand extends Command {
           return;
         }
 
+        const rootCommand = this.findRootCommand();
+        const providedOptions = rootCommand._providedOptions;
+        const missingOptions = rootCommand._missingOptions;
+        const providedOptionsSources = rootCommand._providedOptionsSources;
+
         for (const command of [thisCommand, actionCommand]) {
           const cliOptions = new Set(
-            [...(this._providedOptionsSources?.get(command)?.entries() ?? [])]
+            [...(providedOptionsSources?.get(command)?.entries() ?? [])]
               .filter(([_, value]) => value === "cli")
               .map(([key]) => key),
           );
           const optionKeys = [
-            ...Object.keys(this._providedOptions?.get(command) ?? {}),
-            ...(this._missingOptions?.get(command)?.keys() ?? new Set()),
+            ...Object.keys(providedOptions?.get(command) ?? {}),
+            ...(missingOptions?.get(command)?.keys() ?? new Set()),
           ] as string[];
           const nonCliOptions = optionKeys
             .filter((key) => !cliOptions.has(key))
@@ -149,7 +186,7 @@ export class InteractiveCommand extends Command {
 
           await command.readMissingOptions(
             nonCliOptions,
-            this._providedOptions?.get(command) ?? {},
+            providedOptions?.get(command) ?? {},
           );
         }
       },
