@@ -65,9 +65,9 @@ await program
   .parseAsync(process.argv);
 
 // Try the following commands:
-// command-name pizza
-// command-name pizza -i
-// command-name pizza -i --count 2
-// command-name pizza -i --count 2 --no-cheese
-// command-name pizza -i --name "John Doe"
-// command-name pizza -i --name "John Doe" --non-interactive-option abc
+// order-pizza pizza
+// order-pizza pizza -i
+// order-pizza pizza -i --count 2
+// order-pizza pizza -i --count 2 --no-cheese
+// order-pizza pizza -i --name "John Doe"
+// order-pizza pizza -i --name "John Doe" --non-interactive-option abc

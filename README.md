@@ -106,5 +106,57 @@ await program
 
 More examples can be found in the [examples](/examples/) directory.
 
+## Recipes
+
+### Interactive options for the root command
+
+Interactive options are not supported for the root command. However, you can
+mark a subcommand as the default command to achieve a similar effect.
+
+```typescript
+import { InteractiveCommand } from "interactive-commander";
+
+const program = new InteractiveCommand();
+
+program
+  .command("hello", { isDefault: true })
+  .requiredOption("-n, --name <name>", "your name")
+  .action((options) => {
+    console.log("Hello %s!", options.name);
+  });
+
+await program.interactive().parseAsync(process.argv);
+
+// Try the following commands:
+// default-subcommand
+// default-subcommand -n John
+// default-subcommand -i
+```
+
+### Enable interactive mode by default
+
+The interactive mode flags can be [negatable boolean options][3]
+(e.g. `--no-interactive`). Negatable boolean options are disabled by default.
+
+```typescript
+const program = new InteractiveCommand();
+
+program
+  .command("hello")
+  .option("-n, --name <name>", "your name")
+  .action((options) => {
+    console.log("Hello %s!", options.name);
+  });
+
+await program
+  .interactive("-I, --no-interactive", "disable interactive mode")
+  .parseAsync(process.argv);
+
+// Try the following commands:
+// no-interactive hello
+// no-interactive hello -I
+```
+
 [1]: https://github.com/tj/commander.js
 [2]: https://github.com/SBoudrias/Inquirer.js
+[3]: https://github.com/tj/commander.js#other-option-types-negatable-boolean-and-booleanvalue
