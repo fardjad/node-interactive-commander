@@ -111,7 +111,7 @@ More examples can be found in the [examples](/examples/) directory.
 ### Interactive options for the root command
 
 Interactive options are not supported for the root command. However, you can
-mark a subcommand as the default command to achieve a similar effect.
+mark a subcommand as the default command to achieve a similar effect:
 
 ```typescript
 import { InteractiveCommand } from "interactive-commander";
@@ -135,8 +135,11 @@ await program.interactive().parseAsync(process.argv);
 
 ### Enable interactive mode by default
 
-The interactive mode flags can be [negatable boolean options][3]
-(e.g. `--no-interactive`). Negatable boolean options are disabled by default.
+To enable interactive mode by default, you can define the interactive flags as
+[negatable boolean options][3] (e.g. `--no-interactive`):
+
+````typescript
+negatable boolean options is set to true.
 
 ```typescript
 const program = new InteractiveCommand();
@@ -155,7 +158,7 @@ await program
 // Try the following commands:
 // no-interactive hello
 // no-interactive hello -I
-```
+````
 
 [1]: https://github.com/tj/commander.js
 [2]: https://github.com/SBoudrias/Inquirer.js
