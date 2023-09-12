@@ -138,9 +138,6 @@ await program.interactive().parseAsync(process.argv);
 To enable interactive mode by default, you can define the interactive flags as
 [negatable boolean options][3] (e.g. `--no-interactive`):
 
-````typescript
-negatable boolean options is set to true.
-
 ```typescript
 const program = new InteractiveCommand();
 
@@ -158,7 +155,7 @@ await program
 // Try the following commands:
 // no-interactive hello
 // no-interactive hello -I
-````
+```
 
 [1]: https://github.com/tj/commander.js
 [2]: https://github.com/SBoudrias/Inquirer.js
