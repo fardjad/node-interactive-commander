@@ -111,6 +111,13 @@ export class InteractiveCommand extends Command {
       this._providedOptionsSources = providedOptionsSources;
     } catch {}
 
+    // Even if we prompt for the missing options of the root command here, there
+    // is no easy way to feed them into super.parseAsync. Therefore, interactive
+    // options are not supported on the root command when no subcommand is
+    // invoked. This is a limitation of Commander.js. The only supported hook
+    // is "preSubcommand" which is called after parsing argv and before calling
+    // the subcommand's action.
+
     return super.parseAsync(argv, options);
   }
 
