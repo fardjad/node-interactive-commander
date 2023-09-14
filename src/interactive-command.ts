@@ -143,7 +143,7 @@ export class InteractiveCommand extends Command {
 
       const key = option.attributeName();
       const value = await option.readFunction(
-        providedOptions[key],
+        this.getOptionValue(key) ?? providedOptions[key],
         option,
         this,
       );
