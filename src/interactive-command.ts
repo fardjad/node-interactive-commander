@@ -6,6 +6,7 @@ import {
   type OptionValueSource,
   type OptionValues,
   Option,
+  CommanderError,
 } from "commander";
 import { partialParse } from "parse-my-command";
 
@@ -109,7 +110,17 @@ export class InteractiveCommand extends Command {
       this._providedOptions = providedOptions;
       this._missingOptions = missingOptions;
       this._providedOptionsSources = providedOptionsSources;
-    } catch {}
+    } catch (error) {
+      if (!(error instanceof CommanderError)) {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
+        throw error;
+      }
+
+      // Is this enough?
+      if (!["commander.helpDisplayed"].includes(error.code)) {
+        super.error(error.message, error);
+      }
+    }
 
     // Even if we prompt for the missing options of the root command here, there
     // is no easy way to feed them into super.parseAsync. Therefore, interactive
