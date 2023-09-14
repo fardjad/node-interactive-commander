@@ -221,6 +221,18 @@ export class InteractiveCommand extends Command {
             )
             .filter(Boolean) as Option[];
 
+          nonCliOptions.sort((a, b) => {
+            const aIndex = command.options.findIndex(
+              (option) => option.attributeName() === a.attributeName(),
+            );
+
+            const bIndex = command.options.findIndex(
+              (option) => option.attributeName() === b.attributeName(),
+            );
+
+            return aIndex - bIndex;
+          });
+
           await command.readMissingOptions(
             nonCliOptions,
             providedOptions?.get(command) ?? {},
