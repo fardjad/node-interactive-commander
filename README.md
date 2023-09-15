@@ -14,12 +14,13 @@ in your CLI application, enhancing user experience with minimal effort.
 
 ## Features
 
-- Full compatibility with Commander.js (it uses Commander.js under the hood and is
-  a drop-in replacement for it)
-- Interactive prompts for missing options including the mandatory options
-- Configurable flags for enabling interactive mode
-- Configurable prompts for each option
-- Default prompts for boolean, multiple-choice, and string options
+- Full compatibility with Commander.js (utilizes Commander.js under the hood
+  and serves as a drop-in replacement for it)
+- Customizable flags for interactive mode
+- Automatic prompting for missing options in interactive mode
+- Built-in [Inquirer.js][2] prompts for boolean, multiple-choice, and string
+  options, along with the ability to create custom prompts
+- [Support for plugins](/examples/plugin.ts)
 
 ## Installation
 
@@ -112,8 +113,9 @@ More examples can be found in the [examples](/examples/) directory.
 
 Interactive options on main command won't be prompted for in interactive mode
 if no subcommand is invoked. That is because Commander.js doesn't support
-pre-parse hooks for the main command. As a workaround, you can define a
-subcommand as the default command to achieve a similar effect:
+pre-parse (similar to `preSubcommand` hooks) hooks for the main command. As a
+workaround, you can define a subcommand as the default command to achieve a
+similar effect:
 
 ```typescript
 import { InteractiveCommand } from "interactive-commander";

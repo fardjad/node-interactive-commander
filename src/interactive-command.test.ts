@@ -1,3 +1,4 @@
+import { type RegisterFunction } from "./command-plugin.ts";
 import { InteractiveCommand } from "./interactive-command";
 import { InteractiveOption } from "./interactive-option";
 import { Command, Option } from "commander";
@@ -188,5 +189,47 @@ await test("parseAsync", async (t) => {
     await rootCommand.parseAsync(["node", "test", "sub", "-i"]);
 
     assert.strictEqual(readFunctionMock.mock.calls.length, 0);
+  });
+});
+
+await test("plugins", async (t) => {
+  const rootCommand = new InteractiveCommand();
+
+  await t.test("register function - sync", async (t) => {
+    const mockPlugin = t.mock.fn<RegisterFunction>();
+    rootCommand.use(mockPlugin);
+
+    await rootCommand.parseAsync(["node", "test"]);
+
+    assert.strictEqual(mockPlugin.mock.calls.length, 1);
+  });
+
+  await t.test("register function - async", async (t) => {
+    const mockFunction = t.mock.fn();
+
+    rootCommand.use(
+      async (command) =>
+        new Promise((resolve) => {
+          setImmediate(() => {
+            mockFunction(command);
+            resolve();
+          });
+        }),
+    );
+
+    await rootCommand.parseAsync(["node", "test"]);
+
+    assert.strictEqual(mockFunction.mock.calls.length, 1);
+    assert.strictEqual(mockFunction.mock.calls[0].arguments[0], rootCommand);
+  });
+
+  await t.test("dynamic import", async (t) => {
+    rootCommand.use(
+      new URL("test-support/test-plugin.ts", import.meta.url).toString(),
+    );
+
+    await assert.doesNotReject(async () => {
+      await rootCommand.parseAsync(["node", "test", "test-plugin"]);
+    });
   });
 });

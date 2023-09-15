@@ -1,4 +1,5 @@
 /* eslint-disable no-await-in-loop */
+import { type RegisterFunction } from "./command-plugin.ts";
 import { InteractiveOption } from "./interactive-option.ts";
 import {
   Command,
@@ -24,6 +25,8 @@ export class InteractiveCommand extends Command {
   private _providedOptionsSources:
     | Map<Command, Map<string, OptionValueSource | undefined>>
     | undefined;
+
+  private readonly _pluginRegistrations = new Set<Promise<void>>();
 
   createCommand(name?: string): InteractiveCommand {
     return new InteractiveCommand(name);
@@ -102,6 +105,8 @@ export class InteractiveCommand extends Command {
     argv?: readonly string[],
     options?: ParseOptions,
   ): Promise<this> {
+    await Promise.all(this._pluginRegistrations);
+
     this._isRootCommand = true;
     try {
       const { providedOptions, missingOptions, providedOptionsSources } =
@@ -130,6 +135,39 @@ export class InteractiveCommand extends Command {
     // the subcommand's action.
 
     return super.parseAsync(argv, options);
+  }
+
+  /**
+   * Register a plugin
+   *
+   * @param pathOrModuleName The path to the script or the name of the plugin module
+   * to import. The plugin module must export a `register` function that
+   * takes an `InteractiveCommand` instance as its only argument.
+   */
+  use(pathOrModuleName: string): this;
+
+  /**
+   * Register a plugin
+   *
+   * @param registerFunction The function that registers the plugin
+   */
+  use(registerFunction: RegisterFunction): this;
+
+  use(argument_: any): this {
+    const registerFunction =
+      typeof argument_ === "string"
+        ? async (command: InteractiveCommand) => {
+            const imported = (await import(argument_)) as {
+              register: RegisterFunction;
+            };
+            await imported.register(command);
+          }
+        : (argument_ as RegisterFunction);
+
+    const result = Promise.resolve(registerFunction(this));
+    this._pluginRegistrations.add(result);
+
+    return this;
   }
 
   private async readMissingOptions(
