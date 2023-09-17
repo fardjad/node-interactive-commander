@@ -116,14 +116,22 @@ export class InteractiveCommand extends Command {
       this._missingOptions = missingOptions;
       this._providedOptionsSources = providedOptionsSources;
     } catch (error) {
-      if (!(error instanceof CommanderError)) {
+      if (
+        !(
+          error instanceof CommanderError ||
+          // This is needed for the minified version
+          error.name === "CommanderError"
+        )
+      ) {
         // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw error;
       }
 
+      const commanderError = error as CommanderError;
+
       // Is this enough?
-      if (!["commander.helpDisplayed"].includes(error.code)) {
-        super.error(error.message, error);
+      if (!["commander.helpDisplayed"].includes(commanderError.code)) {
+        super.error(commanderError.message, commanderError);
       }
     }
 
