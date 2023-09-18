@@ -85,6 +85,19 @@ program
       .makeOptionMandatory(),
   )
 
+  .addOption(
+    new InteractiveOption("-r, --voucher-code <string>", "voucher code")
+      // The prompt input gets validated by the argParser function
+      .argParser((value) => {
+        if (typeof value !== "string" || !/^\d{4}$/.test(value)) {
+          throw new TypeError("Invalid voucher code");
+        }
+
+        return value;
+      })
+      .makeOptionMandatory(),
+  )
+
   .action((_options, cmd: InteractiveCommand) => {
     console.log("Options: %o", cmd.opts());
   });
