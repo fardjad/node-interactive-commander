@@ -1,6 +1,6 @@
 {
   "name": "interactive-commander",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "Commander.js with integrated interactive prompts",
   "keywords": [
     "commander",

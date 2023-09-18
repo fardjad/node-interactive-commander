@@ -13,7 +13,10 @@ module.exports = {
         "prettier",
       ],
       plugins: ["@typescript-eslint"],
-      rules: {},
+      rules: {
+        "unicorn/prevent-abbreviations": "off",
+        "@typescript-eslint/no-throw-literal": "off",
+      },
     },
   ],
 };

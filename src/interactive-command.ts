@@ -123,7 +123,6 @@ export class InteractiveCommand extends Command {
           error.name === "CommanderError"
         )
       ) {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw error;
       }
 

@@ -14,6 +14,31 @@ export type PromptFunctions = {
   select: typeof inquirer.select;
 };
 
+/**
+ * Convert the parseArg function of an Option to a validate function that can
+ * be used in inquirer.
+ *
+ * @param parseArg parseArg function from an option
+ */
+export const parseArgToValidate =
+  (parseArg?: (value: string, previous: unknown) => unknown) =>
+  (value: string) => {
+    if (!parseArg) {
+      return true;
+    }
+
+    try {
+      parseArg(value, undefined as unknown);
+      return true;
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+
+      throw error;
+    }
+  };
+
 export class InteractiveOption extends Option {
   public readFunction: ReadFunction | undefined = this._defaultReadFunction;
   private readonly _promptFunctions: PromptFunctions;
@@ -82,6 +107,7 @@ export class InteractiveOption extends Option {
     const answer = await this._promptFunctions.input({
       message: option.description,
       default: currentValue as string,
+      validate: parseArgToValidate(option.parseArg),
     });
 
     if (!answer || answer.length === 0) {

@@ -6,7 +6,7 @@ const program = new InteractiveCommand();
 program
   .command("pizza")
   // Detached options are interactive by default
-  .option("-d, --drink", "drink")
+  .option("-d, --drink", "drink", true)
 
   // Missing mandatory options won't throw an error in interactive mode
   .requiredOption("-o, --olive-oil", "olive oil")
@@ -49,6 +49,19 @@ program
 
         // Return the answer
         return answer;
+      })
+      .makeOptionMandatory(),
+  )
+
+  .addOption(
+    new InteractiveOption("-r, --voucher-code <string>", "voucher code")
+      // The prompt input gets validated by the argParser function
+      .argParser((value) => {
+        if (typeof value !== "string" || !/^\d{4}$/.test(value)) {
+          throw new TypeError("Invalid voucher code");
+        }
+
+        return value;
       })
       .makeOptionMandatory(),
   )

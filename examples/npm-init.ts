@@ -83,7 +83,21 @@ program
     );
   })
   .command("init")
-  .requiredOption("-n, --name <name>", "package name")
+  .addOption(
+    new InteractiveOption("-n, --name <name>", "package name")
+      .argParser((value) => {
+        if (
+          typeof value !== "string" ||
+          // From: https://github.com/dword-design/package-name-regex/blob/master/src/index.js
+          !/^(@[\da-z~-][\d._a-z~-]*\/)?[\da-z~-][\d._a-z~-]*$/.test(value)
+        ) {
+          throw new TypeError("Invalid package name");
+        }
+
+        return value;
+      })
+      .makeOptionMandatory(),
+  )
   .requiredOption("-v, --version <version>", "version", "1.0.0")
   .option("-d, --description [description]", "description")
   .option("-m, --main [entry]", "entry point", "index.js")
@@ -150,7 +164,6 @@ await program
         error.message.startsWith("User force closed the prompt with")
       )
     ) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw error;
     }
   });

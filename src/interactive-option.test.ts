@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 import { InteractiveCommand } from "./interactive-command.ts";
-import { InteractiveOption } from "./interactive-option.ts";
+import { InteractiveOption, parseArgToValidate } from "./interactive-option.ts";
 import type * as inquirer from "@inquirer/prompts";
 import type { CancelablePromise } from "@inquirer/type";
 import assert from "node:assert";
@@ -142,8 +142,17 @@ await test("defaultReadFunction", async (t) => {
     await option.readFunction!("default", option, dummyCommand);
     assert.strictEqual(input.mock.calls.length, 1);
     assert.deepStrictEqual(input.mock.calls[0].arguments, [
-      { default: "default", message: "string" },
+      {
+        default: "default",
+        message: "string",
+        // ignore the validate function
+        validate: input.mock.calls[0].arguments[0].validate,
+      },
     ]);
+    assert.strictEqual(
+      typeof input.mock.calls[0].arguments[0].validate,
+      "function",
+    );
   });
 
   await t.test("input - custom argParser", async (t) => {
@@ -164,5 +173,27 @@ await test("defaultReadFunction", async (t) => {
 
     const answer = await option.readFunction!("default", option, dummyCommand);
     assert.strictEqual(answer, "answer");
+  });
+});
+
+await test("parseArgToValidate", async (t) => {
+  await t.test("when parseArg is undefined", async (t) => {
+    assert.strictEqual(parseArgToValidate()("value"), true);
+  });
+
+  await t.test("when parseArg throws an error", async (t) => {
+    const parseArg = t.mock.fn(() => {
+      throw new Error("dummy error");
+    });
+
+    assert.strictEqual(parseArgToValidate(parseArg)("value"), "dummy error");
+    assert.strictEqual(parseArg.mock.calls.length, 1);
+  });
+
+  await t.test("when parseArg does not throw", async (t) => {
+    const parseArg = t.mock.fn();
+
+    assert.strictEqual(parseArgToValidate(parseArg)("value"), true);
+    assert.strictEqual(parseArg.mock.calls.length, 1);
   });
 });
