@@ -62,8 +62,7 @@ program
         }
 
         return value;
-      })
-      .makeOptionMandatory(),
+      }),
   )
 
   .action((_options, cmd: InteractiveCommand) => {
