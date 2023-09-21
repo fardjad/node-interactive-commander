@@ -28,6 +28,14 @@ in your CLI application, enhancing user experience with minimal effort.
 npm install --save interactive-commander
 ```
 
+You can also scaffold a new project with Interactive Commander and TypeScript
+with [create-interactive-commander][4]. To do so, run the following command and
+follow the prompts:
+
+```bash
+npm create interactive-commander@latest
+```
+
 ## Usage
 
 ```typescript
@@ -176,3 +184,4 @@ await program
 [1]: https://github.com/tj/commander.js
 [2]: https://github.com/SBoudrias/Inquirer.js
 [3]: https://github.com/tj/commander.js#other-option-types-negatable-boolean-and-booleanvalue
+[4]: https://github.com/fardjad/node-create-interactive-commander
