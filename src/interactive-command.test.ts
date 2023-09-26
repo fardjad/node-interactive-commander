@@ -1,6 +1,6 @@
 import { type RegisterFunction } from "./command-plugin.ts";
-import { InteractiveCommand } from "./interactive-command";
-import { InteractiveOption } from "./interactive-option";
+import { InteractiveCommand } from "./interactive-command.ts";
+import { InteractiveOption } from "./interactive-option.ts";
 import { Command, Option } from "commander";
 import assert from "node:assert";
 import { test } from "node:test";
