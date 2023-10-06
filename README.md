@@ -146,7 +146,7 @@ To enable interactive mode by default, you can define the interactive flags as
 
 See [no-interactive.ts](examples/no-interactive.ts) for an example.
 
-### Setting Default Values for Option Prompts Based on Other Options
+### Setting default values for option prompts based on other options
 
 In some cases, it may be necessary for the default value of an option prompt to
 depend on the value of another option. For example, you might want the billing
