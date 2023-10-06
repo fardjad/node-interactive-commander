@@ -135,51 +135,27 @@ Interactive options on main command won't be prompted for in interactive mode
 if no subcommand is invoked. That is because Commander.js doesn't support
 pre-parse (similar to `preSubcommand` hooks) hooks for the main command. As a
 workaround, you can define a subcommand as the default command to achieve a
-similar effect:
+similar effect.
 
-```typescript
-import { InteractiveCommand } from "interactive-commander";
-
-const program = new InteractiveCommand();
-
-program
-  .command("hello", { isDefault: true })
-  .requiredOption("-n, --name <name>", "your name")
-  .action((options) => {
-    console.log("Hello %s!", options.name);
-  });
-
-await program.interactive().parseAsync(process.argv);
-
-// Try the following commands:
-// default-subcommand
-// default-subcommand -n John
-// default-subcommand -i
-```
+See [default-subcommand.ts](examples/default-subcommand.ts) for an example.
 
 ### Enable interactive mode by default
 
 To enable interactive mode by default, you can define the interactive flags as
-[negatable boolean options][3] (e.g. `--no-interactive`):
+[negatable boolean options][3] (e.g. `--no-interactive`).
 
-```typescript
-const program = new InteractiveCommand();
+See [no-interactive.ts](examples/no-interactive.ts) for an example.
 
-program
-  .command("hello")
-  .option("-n, --name <name>", "your name")
-  .action((options) => {
-    console.log("Hello %s!", options.name);
-  });
+### Setting Default Values for Option Prompts Based on Other Options
 
-await program
-  .interactive("-I, --no-interactive", "disable interactive mode")
-  .parseAsync(process.argv);
+In some cases, it may be necessary for the default value of an option prompt to
+depend on the value of another option. For example, you might want the billing
+address to be automatically set to the same value as the user's input for the
+shipping address. To achieve that, you can decorate the `readFunction` of the
+of the billing address option to dynamically set the default value of the
+prompt.
 
-// Try the following commands:
-// no-interactive hello
-// no-interactive hello -I
-```
+See [dependent-prompts.ts](examples/dependent-prompts.ts) for an example.
 
 [1]: https://github.com/tj/commander.js
 [2]: https://github.com/SBoudrias/Inquirer.js
