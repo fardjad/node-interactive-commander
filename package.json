@@ -53,8 +53,8 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^3.2.0",
-    "commander": "^11.0.0",
-    "parse-my-command": "^0.2.24"
+    "commander": "^11.1.0",
+    "parse-my-command": "^0.2.25"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",

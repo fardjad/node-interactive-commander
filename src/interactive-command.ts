@@ -36,8 +36,10 @@ export class InteractiveCommand extends Command {
     return new InteractiveOption(flags, description);
   }
 
-  version(...arguments_: Parameters<Command["version"]>): this {
-    const returnValue = super.version(...arguments_);
+  version(): string | undefined;
+  version(str: string, flags?: string, description?: string): this;
+  version(...args: Parameters<Command["version"]>): this | string | undefined {
+    const returnValue = super.version(...args);
 
     const versionOptionName = (this as this & { _versionOptionName?: string })
       ._versionOptionName;
