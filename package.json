@@ -1,6 +1,6 @@
 {
   "name": "interactive-commander",
-  "version": "0.5.80",
+  "version": "0.5.81",
   "description": "Commander.js with integrated interactive prompts",
   "keywords": [
     "commander",
@@ -68,7 +68,7 @@
     "eslint-config-xo-typescript": "^1.0.1",
     "eslint-plugin-unicorn": "^49.0.0",
     "glob": "^10.3.10",
-    "npm-check-updates": "^16.14.11",
+    "npm-check-updates": "^16.14.12",
     "prettier": "^3.1.1",
     "prettier-plugin-packagejson": "^2.4.7",
     "tsup": "^8.0.1",
