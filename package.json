@@ -1,6 +1,6 @@
 {
   "name": "interactive-commander",
-  "version": "0.5.92",
+  "version": "0.5.93",
   "description": "Commander.js with integrated interactive prompts",
   "keywords": [
     "commander",
@@ -70,7 +70,7 @@
     "glob": "^10.3.10",
     "npm-check-updates": "^16.14.12",
     "prettier": "^3.1.1",
-    "prettier-plugin-packagejson": "^2.4.7",
+    "prettier-plugin-packagejson": "^2.4.8",
     "tsup": "^8.0.1",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
