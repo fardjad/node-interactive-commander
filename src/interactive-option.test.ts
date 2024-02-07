@@ -13,7 +13,11 @@ const createCancelablePromise = <T>(promise: Promise<T>) => {
         resolve(value);
       },
       (error) => {
-        reject(error);
+        if (error instanceof Error) {
+          reject(error);
+        } else {
+          reject(new Error("An error occurred"));
+        }
       },
     );
   });
