@@ -1,6 +1,6 @@
 {
   "name": "interactive-commander",
-  "version": "0.5.149",
+  "version": "0.5.150",
   "description": "Commander.js with integrated interactive prompts",
   "keywords": [
     "commander",
@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@types/node": "^20.11.24",
+    "@types/node": "^20.11.25",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "c8": "^9.1.0",
@@ -73,7 +73,7 @@
     "prettier-plugin-packagejson": "^2.4.12",
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.2"
   },
   "engines": {
     "node": ">=18"
