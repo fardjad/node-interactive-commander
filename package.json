@@ -1,6 +1,6 @@
 {
   "name": "interactive-commander",
-  "version": "0.5.151",
+  "version": "0.5.152",
   "description": "Commander.js with integrated interactive prompts",
   "keywords": [
     "commander",
@@ -52,7 +52,7 @@
     "test:coverage": "c8 --reporter=lcov npm run test"
   },
   "dependencies": {
-    "@inquirer/prompts": "^4.1.0",
+    "@inquirer/prompts": "^4.2.0",
     "commander": "^12.0.0",
     "parse-my-command": "^0.3.14"
   },
@@ -65,7 +65,7 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-xo": "^0.44.0",
-    "eslint-config-xo-typescript": "^3.0.0",
+    "eslint-config-xo-typescript": "^4.0.0",
     "eslint-plugin-unicorn": "^51.0.1",
     "glob": "^10.3.10",
     "npm-check-updates": "^16.14.15",
