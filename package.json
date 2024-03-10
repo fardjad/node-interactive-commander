@@ -1,6 +1,6 @@
 {
   "name": "interactive-commander",
-  "version": "0.5.152",
+  "version": "0.5.153",
   "description": "Commander.js with integrated interactive prompts",
   "keywords": [
     "commander",
@@ -52,9 +52,9 @@
     "test:coverage": "c8 --reporter=lcov npm run test"
   },
   "dependencies": {
-    "@inquirer/prompts": "^4.2.0",
+    "@inquirer/prompts": "^4.2.1",
     "commander": "^12.0.0",
-    "parse-my-command": "^0.3.14"
+    "parse-my-command": "^0.3.15"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
