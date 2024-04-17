@@ -1,6 +1,6 @@
 {
   "name": "interactive-commander",
-  "version": "0.5.164",
+  "version": "0.5.165",
   "description": "Commander.js with integrated interactive prompts",
   "keywords": [
     "commander",
@@ -52,7 +52,7 @@
     "test:coverage": "c8 --reporter=lcov npm run test"
   },
   "dependencies": {
-    "@inquirer/prompts": "^5.0.0",
+    "@inquirer/prompts": "^5.0.1",
     "commander": "^12.0.0",
     "parse-my-command": "^0.3.30"
   },
