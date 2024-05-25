@@ -8,7 +8,7 @@ import {
   type OptionValues,
   Option,
   CommanderError,
-} from "commander";
+} from "@commander-js/extra-typings";
 import { partialParse } from "parse-my-command";
 
 export class InteractiveCommand extends Command {

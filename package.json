@@ -52,6 +52,7 @@
     "test:coverage": "c8 --reporter=lcov npm run test"
   },
   "dependencies": {
+    "@commander-js/extra-typings": "^12.1.0",
     "@inquirer/prompts": "^5.0.4",
     "commander": "^12.1.0",
     "parse-my-command": "^0.3.31"
