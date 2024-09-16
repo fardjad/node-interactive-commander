@@ -1,4 +1,4 @@
-import { type InteractiveCommand } from "./interactive-command.ts";
+import type { InteractiveCommand } from "./interactive-command.ts";
 
 /**
  * @param command The command instance that the plugin is registered on

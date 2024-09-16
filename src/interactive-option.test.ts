@@ -1,10 +1,14 @@
+import assert from "node:assert";
+import { test } from "node:test";
+import type * as inquirer from "@inquirer/prompts";
 /* eslint-disable @typescript-eslint/promise-function-async */
 import { InteractiveCommand } from "./interactive-command.ts";
 import { InteractiveOption, parseArgToValidate } from "./interactive-option.ts";
-import type * as inquirer from "@inquirer/prompts";
-import type { CancelablePromise } from "@inquirer/type";
-import assert from "node:assert";
-import { test } from "node:test";
+
+type CancelablePromise<Value> = Promise<Value> & {
+  /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
+  cancel: () => void;
+};
 
 const createCancelablePromise = <T>(promise: Promise<T>) => {
   const wrappedPromise = new Promise<T>((resolve, reject) => {

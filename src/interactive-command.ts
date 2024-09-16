@@ -1,15 +1,15 @@
-/* eslint-disable no-await-in-loop */
-import { type RegisterFunction } from "./command-plugin.ts";
-import { InteractiveOption } from "./interactive-option.ts";
 import {
   Command,
-  type ParseOptions,
+  CommanderError,
+  Option,
   type OptionValueSource,
   type OptionValues,
-  Option,
-  CommanderError,
+  type ParseOptions,
 } from "commander";
 import { partialParse } from "parse-my-command";
+/* eslint-disable no-await-in-loop */
+import type { RegisterFunction } from "./command-plugin.ts";
+import { InteractiveOption } from "./interactive-option.ts";
 
 export class InteractiveCommand extends Command {
   private _interactiveOptionName = "interactive";
@@ -71,7 +71,7 @@ export class InteractiveCommand extends Command {
    */
   interactive(flags?: string, description?: string): this {
     const newOption = new Option(
-      flags ?? `-i, --interactive`,
+      flags ?? "-i, --interactive",
       description ?? "interactive mode",
     );
 
@@ -162,7 +162,7 @@ export class InteractiveCommand extends Command {
    */
   use(registerFunction: RegisterFunction): this;
 
-  use(argument_: any): this {
+  use(argument_: unknown): this {
     const registerFunction =
       typeof argument_ === "string"
         ? async (command: InteractiveCommand) => {

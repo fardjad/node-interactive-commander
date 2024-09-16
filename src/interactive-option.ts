@@ -1,6 +1,6 @@
-import { type InteractiveCommand } from "./interactive-command.ts";
 import * as inquirer from "@inquirer/prompts";
 import { Option } from "commander";
+import type { InteractiveCommand } from "./interactive-command.ts";
 
 export type ReadFunction = (
   currentValue: unknown,

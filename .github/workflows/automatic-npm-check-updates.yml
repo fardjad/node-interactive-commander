@@ -31,6 +31,7 @@ jobs:
           post-update-commands: |
             npm install
             npm audit fix --quiet --no-progress --no-fund || true
-            npm run fix
 
             npm version patch --no-git-tag-version
+            npm run format
+            npm run lint

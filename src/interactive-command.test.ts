@@ -1,9 +1,9 @@
-import { type RegisterFunction } from "./command-plugin.ts";
-import { InteractiveCommand } from "./interactive-command.ts";
-import { InteractiveOption } from "./interactive-option.ts";
-import { Command, Option } from "commander";
 import assert from "node:assert";
 import { test } from "node:test";
+import { Command, Option } from "commander";
+import type { RegisterFunction } from "./command-plugin.ts";
+import { InteractiveCommand } from "./interactive-command.ts";
+import { InteractiveOption } from "./interactive-option.ts";
 
 await test("interactive", async (t) => {
   await t.test("unset flags", async () => {

@@ -1,7 +1,7 @@
-import { InteractiveCommand, InteractiveOption } from "../src/index.ts";
-import * as inquirer from "@inquirer/prompts";
 import fs from "node:fs";
 import path from "node:path";
+import * as inquirer from "@inquirer/prompts";
+import { InteractiveCommand, InteractiveOption } from "../src/index.ts";
 
 const program = new InteractiveCommand();
 
