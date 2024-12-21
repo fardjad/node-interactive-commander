@@ -1,6 +1,6 @@
 {
   "name": "interactive-commander",
-  "version": "0.5.193",
+  "version": "0.5.194",
   "description": "Commander.js with integrated interactive prompts",
   "keywords": [
     "commander",
@@ -53,7 +53,7 @@
     "prepare": "tsup ./src/index.ts --format esm,cjs --dts --clean --sourcemap inline --silent"
   },
   "dependencies": {
-    "@inquirer/prompts": "^7.2.0",
+    "@inquirer/prompts": "^7.2.1",
     "commander": "^12.1.0",
     "parse-my-command": "^0.3.31"
   },
